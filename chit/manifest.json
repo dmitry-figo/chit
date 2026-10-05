@@ -1,0 +1,26 @@
+{
+  "name": "chit",
+  "short_name": "Чит",
+  "description": "Тренажёр слогового чтения для детей 5–7 лет после букваря",
+  "lang": "ru-RU",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FFF8E7",
+  "theme_color": "#4A90D9",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}

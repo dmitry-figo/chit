@@ -1,0 +1,11 @@
+{
+  "name": "chit",
+  "version": "0.1.0",
+  "description": "Чит — тренажёр слогового чтения для детей 5–7 лет после букваря (PWA-прототип)",
+  "private": true,
+  "scripts": {
+    "test": "node tests/domain.test.cjs",
+    "serve": "python3 -m http.server 8000"
+  },
+  "license": "UNLICENSED"
+}

@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Иконка «Чит»: книжка на ярком фоне -->
+  <rect width="512" height="512" rx="96" fill="#4A90D9"/>
+  <rect x="40" y="40" width="432" height="432" rx="72" fill="#FFD54F"/>
+  <!-- раскрытая книжка -->
+  <path d="M256 160c-40-26-90-30-136-22v236c46-8 96-4 136 22 40-26 90-30 136-22V138c-46-8-96-4-136 22z"
+        fill="#FFFFFF" stroke="#2A5F9E" stroke-width="16" stroke-linejoin="round"/>
+  <line x1="256" y1="160" x2="256" y2="396" stroke="#2A5F9E" stroke-width="16" stroke-linecap="round"/>
+  <!-- строки на страницах -->
+  <g stroke="#4A90D9" stroke-width="12" stroke-linecap="round">
+    <line x1="152" y1="196" x2="228" y2="208"/>
+    <line x1="152" y1="236" x2="228" y2="248"/>
+    <line x1="152" y1="276" x2="228" y2="288"/>
+    <line x1="284" y1="208" x2="360" y2="196"/>
+    <line x1="284" y1="248" x2="360" y2="236"/>
+    <line x1="284" y1="288" x2="360" y2="276"/>
+  </g>
+  <!-- слоги МА -->
+  <text x="256" y="470" font-family="Arial, sans-serif" font-size="88" font-weight="900"
+        text-anchor="middle" fill="#2A5F9E">МА</text>
+</svg>
