@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Чит — Тренажёр чтения по слогам</title>
+
+<!-- ===== PWA-теги ===== -->
+<meta name="description" content="Чит — тренажёр слогового чтения для детей 5–7 лет после букваря.">
+<meta name="theme-color" content="#4A90D9">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Чит">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/svg+xml" href="icon.svg">
+<link rel="apple-touch-icon" href="icon.svg">
+<!-- ==================== -->
+
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ЭКРАН 1: СТАРТ -->
+<div id="screen-start" class="screen active">
+  <div class="start-container">
+    <div class="logo">📖</div>
+    <h1 class="title">Чит</h1>
+    <p class="subtitle">Учимся читать по слогам</p>
+
+    <div id="diag-panel" class="diag-panel">
+      <div class="diag-title">🔍 Диагностика окружения</div>
+      <div class="diag-row"><span class="diag-label">Распознавание речи</span><span id="diag-speech" class="diag-status">...</span></div>
+      <div class="diag-row"><span class="diag-label">Озвучивание</span><span id="diag-synth" class="diag-status">...</span></div>
+      <div class="diag-row"><span class="diag-label">Микрофон</span><span id="diag-mic" class="diag-status">...</span></div>
+      <div class="diag-row"><span class="diag-label">Сохранение прогресса</span><span id="diag-storage" class="diag-status">...</span></div>
+      <div class="diag-row"><span class="diag-label">Окружение</span><span id="diag-env" class="diag-status">...</span></div>
+    </div>
+
+    <button id="btn-request-mic" class="btn btn-secondary" style="background:linear-gradient(135deg,#FF6B35,#FF8F5E);color:white;border:none;margin-top:12px">
+      🎤 Разрешить доступ к микрофону
+    </button>
+
+    <div id="env-warning" class="env-warning" style="display:none">
+      <strong>⚠️ Приложение в iframe — микрофон заблокирован</strong>
+      Чтобы распознавание речи работало, откройте приложение напрямую:
+      <code id="instruction-text">1. Сохраните папку chit на компьютер
+2. Запустите локальный сервер: python -m http.server 8000
+3. Откройте http://localhost:8000 в Chrome/Edge
+4. Разрешите доступ к микрофону</code>
+      <button id="btn-copy-instruction" class="btn btn-primary" style="font-size:13px;padding:8px 16px;margin-top:10px;width:100%">📋 Скопировать инструкцию</button>
+    </div>
+
+    <button id="btn-start" class="btn btn-primary btn-huge">Начать читать! 🚀</button>
+    <button id="btn-stats" class="btn btn-secondary">📊 Динамика обучения</button>
+    <button id="btn-reset" class="btn btn-secondary" style="color:#C62828;border-color:#C62828">🗑️ Сбросить прогресс</button>
+  </div>
+</div>
+
+<!-- ЭКРАН 2: ТРЕНИРОВОЧНЫЙ БЛОК СЛОГОВ -->
+<div id="screen-block" class="screen">
+  <div class="block-header">
+    <span id="block-title" class="block-title">Блок 1.1</span>
+    <button id="btn-back" class="btn btn-icon" title="На главную">🏠</button>
+  </div>
+  <div class="syllable-area">
+    <div id="syllable-display" class="syllable-display">МА</div>
+    <div id="feedback" class="feedback hidden"></div>
+    <div class="demo-panel">
+      <div class="demo-panel-title">🎮 ДЕМО-РЕЖИМ</div>
+      <div class="demo-buttons">
+        <button class="demo-btn correct" data-demo="correct">✅ Верно</button>
+        <button class="demo-btn wrong" data-demo="wrong">❌ Ошибка</button>
+        <button class="demo-btn" data-demo="skip">⏭️ Пропустить</button>
+        <button class="demo-btn" data-demo="speak">🔊 Озвучить</button>
+      </div>
+      <div class="demo-controls">
+        <div class="demo-control-row">
+          <label class="demo-control-label" for="voice-select">🎙️ Голос диктора:</label>
+          <select id="voice-select" class="voice-select"><option value="">Загрузка...</option></select>
+        </div>
+        <div class="recognition-log">
+          <div class="recognition-log-label">
+            <span id="rec-indicator" class="recognition-log-indicator"></span>
+            <span>🎤 Распознанный текст:</span>
+          </div>
+          <div id="recognition-log-box" class="recognition-log-box empty"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="controls">
+    <button id="btn-repeat" class="btn btn-icon-lg" title="Повтори">🔁</button>
+    <button id="btn-mic" class="btn btn-mic">
+      <span class="mic-icon">🎤</span>
+      <span class="mic-text">Говори!</span>
+      <span class="mic-hint">удерживай</span>
+    </button>
+    <button id="btn-skip" class="btn btn-icon-lg" title="Пропустить">⏭️</button>
+  </div>
+  <div class="progress-area">
+    <div id="progress-bar" class="progress-bar"></div>
+    <div id="progress-text" class="progress-text">0 / 4</div>
+  </div>
+  <div id="letters-hint" class="letters-hint">Буквы: М, А</div>
+</div>
+
+<!-- ЭКРАН 3: ЗАВЕРШЕНИЕ БЛОКА -->
+<div id="screen-complete" class="screen">
+  <div class="complete-container">
+    <div id="complete-sticker" class="sticker">🏆</div>
+    <h2 class="complete-title">Ура! Блок пройден!</h2>
+    <p id="complete-stats" class="complete-stats">Ошибок: 2 · Верных: 10</p>
+    <button id="btn-next-block" class="btn btn-primary btn-huge">Следующий блок! ➡️</button>
+    <button id="btn-home" class="btn btn-secondary">🏠 На главную</button>
+  </div>
+  <div id="confetti" class="confetti"></div>
+</div>
+
+<!-- ЭКРАН СТАТИСТИКИ (родитель/учитель) -->
+<div id="screen-stats" class="screen">
+  <div class="stats-container">
+    <div class="stats-header">
+      <h2>📊 Динамика обучения</h2>
+      <button id="btn-stats-back" class="btn btn-icon">🏠</button>
+    </div>
+    <div id="stats-summary" class="stats-summary"></div>
+    <div id="stats-table" class="stats-table"></div>
+  </div>
+</div>
+
+<!-- ===== ЯДРО (Domain/Data): без DOM ===== -->
+<script src="src/domain/SyllableLoader.js"></script>
+<script src="src/domain/BlockSession.js"></script>
+<script src="src/main.js"></script>
+<!-- ===== Speech-слой: интерфейс + WebSpeechAdapter ===== -->
+<script src="speech/SpeechAdapter.js"></script>
+<script src="speech/WebSpeechAdapter.js"></script>
+<!-- ===== UI-слой: связка UI с ядром ===== -->
+<script src="app.js"></script>
+</body>
+</html>
